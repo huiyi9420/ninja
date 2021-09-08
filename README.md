@@ -1,22 +1,22 @@
-# Ninja
+# 工具人
 
-一次对于 koa2 vue3 vite 的简单尝试
+一次对于Ninja的简单改造
 
 ## 说明
 
-Ninja 仅供学习参考使用，请于下载后的 24 小时内删除，本人不对使用过程中出现的任何问题负责，包括但不限于 `数据丢失` `数据泄露`。
+工具人 仅供学习参考使用，请于下载后的 24 小时内删除，本人不对使用过程中出现的任何问题负责，包括但不限于 `数据丢失` `数据泄露`。
 
-Ninja 仅支持 qinglong 2.8+
+工具人 仅支持 qinglong 2.8+
 
-[TG 频道](https://t.me/joinchat/sHKuteb_lfdjNmZl)
+[comment]: <> ([TG 频道]&#40;https://t.me/joinchat/sHKuteb_lfdjNmZl&#41;)
 
 ## 特性
 
-- [x] 扫码，跳转登录添加/更新 cookie
-- [x] 添加/更新 cookie 后发送通知
+- [ ] 扫码，跳转登录添加/更新 cookie
+- [ ] 添加/更新 cookie 后发送通知
 - [x] 扫码发送通知可关闭
-- [x] 添加备注并将通知中的 pt_pin nickName 修改为备注
-- [x] 默认备注为昵称
+- [ ] 添加备注并将通知中的 pt_pin nickName 修改为备注
+- [x] 默认备注为账号
 - [x] 添加扫码推送卡片
 - [ ] 替换 cookie 失效通知
 - [ ] 登录界面展示自定义标语
@@ -82,7 +82,7 @@ Ninja 仅支持 qinglong 2.8+
    **进容器内执行以下命令**
 
    ```bash
-   git clone https://github.com/MoonBegonia/ninja.git /ql/ninja
+   git clone https://github.com/huiyi9420/ninja.git /ql/ninja
    cd /ql/ninja/backend
    pnpm install
    pm2 start
@@ -107,7 +107,7 @@ Ninja 仅支持 qinglong 2.8+
 使用此种方法无法跟随青龙一起启动，**无法发送扫码通知**，请知悉。
 
 ```bash
-git clone git clone https://github.com/MoonBegonia/ninja.git
+git clone git clone https://github.com/huiyi9420/ninja.git
 cd ninja/backend
 pnpm install
 # 复制 sendNotify.js 到容器内 scripts 目录，`qinglong` 为容器名
@@ -131,6 +131,11 @@ QL_URL=http://localhost:5700
 
 目前支持的环境变量有：
 
+- `SHOW_QR`：是否显示扫码卡片，默认不显示
+- `SHOW_WSCK`：是否显示WSCK录入，默认不显示
+- `SHOW_CK`：是否显示CK登录，默认不显示
+- `ALLOW_WSCK_ADD`：是否允许添加WSCK账号 不允许添加时则只允许已有账号登录
+- `ALLOW_WSCK_NUM`：允许添加WSCK账号的最大数量
 - `ALLOW_ADD`: 是否允许添加账号 不允许添加时则只允许已有账号登录（默认 `true`）
 - `ALLOW_NUM`: 允许添加账号的最大数量（默认 `40`）
 - `NINJA_PORT`: Ninja 运行端口（默认 `5701`）
@@ -156,9 +161,9 @@ pm2 start
 
 ### Ninja 自定义
 
-自定义推送二维码：将 `push.jpg` 文件添加到 `/ql/ninja/backend/static/` 目录下刷新网页即可。
+~~自定义推送二维码：将 `push.jpg` 文件添加到 `/ql/ninja/backend/static/` 目录下刷新网页即可。~~
 
-自定义常见活动：修改 `/ql/backend/static/activity.json` 即可
+~~自定义常见活动：修改 `/ql/backend/static/activity.json` 即可~~
 
 ## 注意事项
 
