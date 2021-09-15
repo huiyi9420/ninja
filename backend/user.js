@@ -5,8 +5,8 @@ const got = require('got');
 const got1 = require('got');
 require('dotenv').config();
 const QRCode = require('qrcode');
-// 新增  , addWSCKEnv, delWSCKEnv, getWSCKEnvs, getWSCKEnvsCount, updateWSCKEnv
-const { addEnv, delEnv, getEnvs, getEnvsCount, updateEnv , addWSCKEnv, delWSCKEnv, getWSCKEnvs, getWSCKEnvsCount, updateWSCKEnv } = require('./ql');
+// 新增  , addWSCKEnv, delWSCKEnv, getWSCKEnvs, getWSCKEnvsCount, updateWSCKEnv enableEnv
+const { addEnv, delEnv, getEnvs, getEnvsCount, updateEnv , enableEnv , addWSCKEnv, delWSCKEnv, getWSCKEnvs, getWSCKEnvsCount, updateWSCKEnv } = require('./ql');
 const path = require('path');
 const qlDir = process.env.QL_DIR || '/ql';
 const notifyFile = path.join(qlDir, 'shell/notify.sh');
@@ -216,6 +216,12 @@ module.exports = class User {
       const body = await updateEnv(this.cookie, this.eid);
       if (body.code !== 200) {
         throw new UserError(body.message || '更新账户错误，请重试', 221, body.code || 200);
+      } else if (body.code === 200) {
+        // 启用变量
+        const re = await enableEnv(this.eid);
+        if (re.code !== 200) {
+          throw new UserError(body.message || '启用账户错误，请重试', 221, body.code || 200);
+        }
       }
       this.timestamp = body.data.timestamp;
       message = `欢迎回来，${this.nickName}`;
@@ -314,8 +320,15 @@ module.exports = class User {
     } else {
       this.eid = env._id;
       const body = await updateWSCKEnv(this.jdwsck, this.eid);
+
       if (body.code !== 200) {
-        throw new UserError(body.message || '更新账户错误，请重试', 221, body.code || 200);
+        throw new UserError(body.message || '更新WSKEY错误，请重试', 221, body.code || 200);
+      } else if (body.code === 200) {
+        // 启用变量
+        const re = await enableEnv(this.eid);
+        if (re.code !== 200) {
+          throw new UserError(body.message || '启用WSKEY错误，请重试', 221, body.code || 200);
+        }
       }
       this.timestamp = body.data.timestamp;
       message = `欢迎回来，${this.nickName}`;
