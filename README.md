@@ -1,6 +1,8 @@
 # 不和东哥做朋友了
 
 一次对于Ninja的简单改造
+## 更新：
+ - 增加安卓版获取ck的app下载地址，傻瓜式获取ck[功能详见](https://github.com/ZhuSky/JDCookie/blob/main/README.md)
 
 ## 说明
 - 代码写的很烂，能用就行，觉得垃圾的自己改哈
@@ -12,6 +14,7 @@
 ## 感谢
  - [Waikkii](https://github.com/Waikkii)
  - [Zy143L](https://github.com/Zy143L)
+ - [MrZhu](https://github.com/zhuSKY)
 - 等等不知道某些技术是那些的大佬们，感谢你们的奉献为我带来了思路
 ## 特性
 
