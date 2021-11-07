@@ -486,7 +486,7 @@ module.exports = class User {
 //////////////////////////////////////////////
   /**
    * 新增ZY143L大佬的获取云UA方法
-   * @returns {Promise<void>}
+   * @date 20211107
    */
   async #getCloudUA() {
     const cloud_arg = await api({
@@ -499,6 +499,12 @@ module.exports = class User {
     }).json();
     this.ua = cloud_arg['User-Agent'];
   }
+
+  /**
+   * 采用ZY143L大佬的签名接口
+   * @date 20211107
+   * @returns {Promise<{eid: *, nickName: *, message: string, timestamp: *}>}
+   */
   async #getWSCKCheck() {
     const s = await api({
         url: new Buffer('aHR0cDovLzE1MC4xNTguMTUzLjUzOjg0NDMvd3NrZXk=','base64').toString(),
