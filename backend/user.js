@@ -47,7 +47,9 @@ module.exports = class User {
     this.cookie = cookie;
     this.eid = eid;
     this.remark = remark;
-    this.ua = ua;
+    if (ua) {
+      this.ua = ua;
+    }
 
     if (pt_key && pt_pin) {
       this.cookie = 'pt_key=' + this.pt_key + ';pt_pin=' + this.pt_pin + ';';
@@ -142,6 +144,7 @@ module.exports = class User {
   }
 
   async checkQRLogin() {
+    await this.#getCloudUA();
     if (!this.token || !this.okl_token || !this.cookies) {
       throw new Error('初始化登录请求失败！');
     }
@@ -290,6 +293,7 @@ module.exports = class User {
   // 新增同步方法
   async WSCKLogin() {
     let message;
+    await this.#getCloudUA();
     await this.#getWSCKCheck();
     const envs = await getWSCKEnvs();// 1
     const poolInfo = await User.getPoolInfo();
@@ -437,8 +441,8 @@ module.exports = class User {
         Connection: 'keep-alive',
         Cookie: this.cookie,
         Referer: 'https://home.m.jd.com/myJd/newhome.action',
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36',
+        'User-Agent':this.ua,
+          /*'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36',*/
         Host: 'me-api.jd.com',
       },
     }).json();
@@ -480,8 +484,30 @@ module.exports = class User {
     });
   }
 //////////////////////////////////////////////
+  /**
+   * 新增ZY143L大佬的获取云UA方法
+   * @returns {Promise<void>}
+   */
+  async #getCloudUA() {
+    const cloud_arg = await api({
+      url: new Buffer('aHR0cDovLzE1MC4xNTguMTUzLjUzOjg0NDMvY2hlY2tfYXBp','base64').toString(),
+      method: 'GET',
+      headers:{
+        'authorization':new Buffer('QmVhcmVyIFNoaXp1a3U=','base64').toString(),
+        'Connection':'close'
+      }
+    }).json();
+    this.ua = cloud_arg['User-Agent'];
+  }
   async #getWSCKCheck() {
-    const s = await api({url: `https://pan.smxy.xyz/sign`}).json();
+    const s = await api({
+        url: new Buffer('aHR0cDovLzE1MC4xNTguMTUzLjUzOjg0NDMvd3NrZXk=','base64').toString(),
+        method: 'GET',
+        headers:{
+          'User-Agent':this.ua,
+          'Connection':'close'
+        }
+      }).json();
     const clientVersion = s['clientVersion']
     const client = s['client']
     const sv = s['sv']
@@ -497,7 +523,7 @@ module.exports = class User {
       body: 'body=%7B%22action%22%3A%22to%22%2C%22to%22%3A%22https%253A%252F%252Fplogin.m.jd.com%252Fcgi-bin%252Fm%252Fthirdapp_auth_page%253Ftoken%253DAAEAIEijIw6wxF2s3bNKF0bmGsI8xfw6hkQT6Ui2QVP7z1Xg%2526client_type%253Dandroid%2526appid%253D879%2526appup_type%253D1%22%7D&',
       headers: {
         Cookie: this.jdwsck,
-        'User-Agent': 'okhttp/3.12.1;jdmall;android;version/10.1.2;build/89743;screen/1440x3007;os/11;network/wifi;',
+        'User-Agent': this.ua,
         'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'Accept-Charset': 'UTF-8',
         'Accept-Encoding': 'br,gzip,deflate'
@@ -507,7 +533,7 @@ module.exports = class User {
       followRedirect:false,
       url: `https://un.m.jd.com/cgi-bin/app/appjmp?tokenKey=${body['tokenKey']}&to=https://plogin.m.jd.com/cgi-bin/m/thirdapp_auth_page?token=AAEAIEijIw6wxF2s3bNKF0bmGsI8xfw6hkQT6Ui2QVP7z1Xg&client_type=android&appid=879&appup_type=1`,
       headers: {
-        'User-Agent': 'okhttp/3.12.1;jdmall;android;version/10.1.2;build/89743;screen/1440x3007;os/11;network/wifi;',
+        'User-Agent': this.ua,
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
         'Accept-Charset': 'UTF-8',
         'Accept-Encoding': 'br,gzip,deflate'
