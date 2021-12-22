@@ -52,6 +52,7 @@ router.get('/api/info', async (ctx) => {
 
 router.get('/api/qrcode', async (ctx) => {
   const user = new User({});
+  await this.#getCloudUA();
   await user.getQRConfig();
   ctx.body = {
     data: {
